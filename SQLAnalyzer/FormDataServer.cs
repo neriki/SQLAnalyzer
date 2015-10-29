@@ -47,46 +47,53 @@ namespace SQLAnalyzer
 
         public void LoadFromDb(string dsn, DbType type)
         {
-            switch (type)
-            {
-                case DbType.MySql:
-                    _oDatabase = new ClassMySqlServer();
-                    break;
-                case DbType.SqlServer:
-                    _oDatabase = new ClassSqlServerServer();
-                    break;
-            }
-
-            Text = dsn;
-
-            _oDatabase.Dsn = dsn;
-
-            _oDatabase.LoadFromDb();
-
-            treeViewDB.Nodes.Clear();
-
-            foreach (ClassDatabase oDb in _oDatabase)
-            {
-                TreeNode tn=treeViewDB.Nodes.Add(oDb.Name);
-                tn.Tag = oDb;
-                oDb.LoadFromDb();
-                foreach (ClassTable oDt in oDb)
+            try {
+                switch (type)
                 {
-                    //tn.Nodes.Add(oDt.name + " (" + oDt.nbRow() + " lignes )");
-                    TreeNode tt = tn.Nodes.Add(oDt.Name);
-                    tt.Tag = oDt;
-                    oDt.LoadFromDb();
-                    foreach (ClassField oFd in oDt)
+                    case DbType.MySql:
+                        _oDatabase = new ClassMySqlServer();
+                        break;
+                    case DbType.SqlServer:
+                        _oDatabase = new ClassSqlServerServer();
+                        break;
+                }
+
+                Text = dsn;
+
+                _oDatabase.Dsn = dsn;
+
+                _oDatabase.LoadFromDb();
+
+                treeViewDB.Nodes.Clear();
+
+                foreach (ClassDatabase oDb in _oDatabase)
+                {
+                    TreeNode tn = treeViewDB.Nodes.Add(oDb.Name);
+                    tn.Tag = oDb;
+                    oDb.LoadFromDb();
+                    foreach (ClassTable oDt in oDb)
                     {
-                        TreeNode tf = tt.Nodes.Add(oFd.Name);
-                        tf.Tag = oFd;
-                        if (oFd.Type!="") tf.Nodes.Add(oFd.Type);
-                        if (oFd.NullAccepted!="") tf.Nodes.Add(oFd.NullAccepted);
-                        if (oFd.IsKey!="") tf.Nodes.Add(oFd.IsKey);
-                        if (oFd.Extra!="") tf.Nodes.Add(oFd.Extra);
-                        
+                        //tn.Nodes.Add(oDt.name + " (" + oDt.nbRow() + " lignes )");
+                        TreeNode tt = tn.Nodes.Add(oDt.Name);
+                        tt.Tag = oDt;
+                        oDt.LoadFromDb();
+                        foreach (ClassField oFd in oDt)
+                        {
+                            TreeNode tf = tt.Nodes.Add(oFd.Name);
+                            tf.Tag = oFd;
+                            if (oFd.Type != "") tf.Nodes.Add(oFd.Type);
+                            if (oFd.NullAccepted != "") tf.Nodes.Add(oFd.NullAccepted);
+                            if (oFd.IsKey != "") tf.Nodes.Add(oFd.IsKey);
+                            if (oFd.Extra != "") tf.Nodes.Add(oFd.Extra);
+
+                        }
                     }
                 }
+            }
+            catch(Exception e)
+            {
+                Close();
+                throw (e);
             }
         }
 
