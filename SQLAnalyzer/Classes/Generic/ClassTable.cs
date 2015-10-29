@@ -58,5 +58,6 @@ namespace SQLAnalyzer.Classes.Generic
         {
             return GetEnumerator();
         }
+
     }
 }
