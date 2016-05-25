@@ -90,10 +90,10 @@ namespace SQLAnalyzer
                     }
                 }
             }
-            catch(Exception e)
+            catch(Exception)
             {
                 Close();
-                throw (e);
+                throw;
             }
         }
 
@@ -180,7 +180,7 @@ namespace SQLAnalyzer
 
         private void toolStripButtonExecute_Click(object sender, EventArgs e)
         {
-            UserControlQuery tbl = (UserControlQuery)(tabControlDataServer.SelectedTab.Tag);
+            UserControlQuery tbl = (UserControlQuery)tabControlDataServer.SelectedTab.Tag;
             tbl.LoadFromDb();
         }
 
